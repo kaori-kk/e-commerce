@@ -27,8 +27,9 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
-  background: rgb(231, 226, 221);
+  background: var(--mainBlack);
   z-index: 1;
+  color: var(--mainWhite);
 }
 .navbar-center {
   width: 100%;
@@ -41,6 +42,7 @@ body {
 }
 .nav-icon {
   font-size: 1.5rem;
+  color: var(--mainWhite);
 }
 .cart-btn {
   position: relative;
