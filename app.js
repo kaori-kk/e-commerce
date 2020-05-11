@@ -66,6 +66,8 @@ class UI {
         cart = [...cart, cartItem]
         Storage.saveCart(cart);
         this.setCartValues(cart);
+        this.addCartItems(cartItem);
+        this.showCart();
         });
     });
   }
@@ -79,9 +81,40 @@ class UI {
     })
     cartTotal.innerText = parseFloat(tempTotal.toFixed(2))
     cartItems.innerText = itemsTotal;
-    console.log(tempTotal)
-    console.log(itemsTotal)
   }
+
+  addCartItems(item){
+    const div = document.createElement("div");
+    div.classList.add("cart-item")
+    div.innerHTML = `
+      <img src=${item.image} alt="product" />
+      <div>
+        <h4>${item.title}</h4>
+        <h5>$${item.price}</h5>
+        <span class="remove-item" data-id=${item.id}>remove</span>
+      </div>
+      <div>
+        <i class="fas fa-chevron-up" data-id=${item.id}></i>
+        <p class="item-amount">${item.amount}</p>
+        <i class="fas fa-chevron-down" data-id=${item.id}></i>
+      </div>`
+      cartContent.appendChild(div);
+  }
+  
+  showCart(){
+    cartOverlay.classList.add("overlay");
+    cartDOM.classList.add("showCart");
+  }
+
+  setup(){
+    cart = Storage.getCart();
+    this.setCartValues(cart);
+    this.generateCartItems(cart)
+  }
+  generateCartItems(cart){
+    cart.forEach(item => this.addCartItems(item));
+  }
+
 }
 
 class Storage {
@@ -96,12 +129,16 @@ class Storage {
   static saveCart(cart){
     localStorage.setItem("cart", JSON.stringify(cart))
   }
+
+  static getCart(){
+    return localStorage.getItem("cart")?JSON.parse(localStorage.getItem("cart")):[];
+  }
 }
 
 document.addEventListener("DOMContentLoaded", ()=> {
   const ui = new UI();
   const products = new Products();
-
+  ui.setup();
   products.getProducts().then(products => {
     ui.displayProducts(products)
     Storage.saveProducts(products);
