@@ -57,6 +57,10 @@ body {
   border-radius: 30%;
   color: var(--mainWhite);
 }
+
+.fa-bars {
+  color: black;
+}
 /* --------------- End of Navbar ---------------- */
 
 
