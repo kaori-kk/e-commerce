@@ -1,3 +1,12 @@
+const client = contentful.createClient({
+  // This is the space ID. A space is like a project folder in Contentful terms
+  space: "88ayjq6kij9g",
+  // This is the access token for this space. Normally you get both ID and the token in the Contentful web app
+  accessToken: "JEj4OLLKehWZeYTLcTUWN6_KuCCUZkDc0vAeP3kAnT0"
+  
+});
+
+
 const cartBtn = document.querySelector(".cart-btn");
 const closeCartBtn = document.querySelector(".close-cart");
 const clearCartBtn = document.querySelector(".clear-cart");
@@ -14,21 +23,25 @@ let buttonsDOM = [];
 class Products {
   async getProducts(){
     try {
-      let result = await fetch('products.json')
-      let data = await result.json();
-
-    let products = data.items;
-    products = products.map(item => {
-      const {title,price} = item.fields;
-      const {id} = item.sys;
-      const image = item.fields.image.fields.file.url;
-      return {title,price,id,image}
-    })
+      
+      let contentful = await client.getEntries({
+        content_type: "furuhonn"
+      });
+      // let result = await fetch('products.json')
+      // let data = await result.json();
+      
+      let products = contentful.items;
+      products = products.map(item => {
+        const {title,price} = item.fields;
+        const {id} = item.sys;
+        const image = item.fields.image.fields.file.url;
+        return {title,price,id,image}
+      })
     return products;
-    }catch(error){
-      console.log(error);
-    }
+  }catch(error){
+    console.log(error);
   }
+}
 }
 
 class UI {
@@ -151,7 +164,7 @@ class UI {
           this.setCartValues(cart);
           decreseAmount.previousElementSibling.innerText = tempItem.amount;
         } else {
-          cartContain.removeChild(decreseAmount.parentElement.parentElement)
+          cartContent.removeChild(decreseAmount.parentElement.parentElement)
           this.removeItem(id);
         }
       }
