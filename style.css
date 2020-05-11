@@ -121,7 +121,7 @@ body {
   position: relative;
   overflow: hidden;
 }
-.cart-btn {
+.bag-btn {
   position: absolute;
   top: 70%;
   right: 0;
@@ -135,13 +135,13 @@ body {
   transform: translateX(101%);
   cursor: pointer;
 }
-.cart-btn:hover {
+.bag-btn:hover {
   color: var(--mainWhite);
 }
 .fa-shopping-cart {
   margin-right: 0.5rem;
 }
-.img-container:hover .cart-btn {
+.img-container:hover .bag-btn {
   transform: translateX(0);
 }
 .product-img {

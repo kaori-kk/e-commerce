@@ -39,7 +39,7 @@ class UI {
         <article class="product">
           <div class="img-container">
             <img src=${product.image} alt="product" class="product-img">
-            <button class="cart-btn" data-id=${product.id}><i class="fas fa-shopping-cart"></i>Add to cart</button>
+            <button class="bag-btn" data-id=${product.id}><i class="fas fa-shopping-cart"></i>Add to cart</button>
           </div>
         <h3>${product.title}</h3>
         <h4>$${product.price}</h4>
@@ -50,9 +50,9 @@ class UI {
   }
 
   addCartButtons(){
-    const cartBtn = [...document.querySelectorAll(".cart-btn")]
-    buttonsDOM = cartBtn;
-    cartBtn.forEach(btn => {
+    const buttons = [...document.querySelectorAll(".bag-btn")]
+    buttonsDOM = buttons;
+    buttons.forEach(btn => {
       let id = btn.dataset.id
       let inCart = cart.find(item => item.id === id);
       if (inCart){
@@ -65,8 +65,22 @@ class UI {
         let cartItem = {...Storage.getProduct(id), amount: 1};
         cart = [...cart, cartItem]
         Storage.saveCart(cart);
+        this.setCartValues(cart);
         });
     });
+  }
+
+  setCartValues(cart){
+    let tempTotal = 0;
+    let itemsTotal = 0;
+    cart.map(item => {
+      tempTotal += item.price * item.amount;
+      itemsTotal += item.amount;
+    })
+    cartTotal.innerText = parseFloat(tempTotal.toFixed(2))
+    cartItems.innerText = itemsTotal;
+    console.log(tempTotal)
+    console.log(itemsTotal)
   }
 }
 
