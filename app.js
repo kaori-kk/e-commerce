@@ -110,12 +110,49 @@ class UI {
     cart = Storage.getCart();
     this.setCartValues(cart);
     this.generateCartItems(cart)
+    cartBtn.addEventListener("click", this.showCart);
+    closeCartBtn.addEventListener("click", this.hideCart);
   }
+
   generateCartItems(cart){
     cart.forEach(item => this.addCartItems(item));
   }
 
+  hideCart(){
+    cartOverlay.classList.remove("overlay");
+    cartDOM.classList.remove("showCart");
+  }
+
+  itemAmount(){
+    clearCartBtn.addEventListener("click", () => {
+      this.clearCart()
+    });
+  }
+
+  clearCart(){
+    let cartItems = cart.map(item => item.id);
+    cartItems.forEach(id => this.removeItem(id))
+    while(cartContent.children.length > 0){
+      cartContent.removeChild(cartContent.children[0])
+    }
+    this.hideCart();
+  }
+
+  removeItem(id){
+    cart = cart.filter(item => item.id !== id);
+    this.setCartValues(cart);
+    Storage.saveCart(cart);
+    let button = this.getSelectedButton(id);
+    button.disabled = false;
+    button.innerHTML = `<i class="fas fa-shopping-cart"></i>Add to Cart`;
+  }
+
+  getSelectedButton(id){
+    return buttonsDOM.find(button => button.dataset.id === id)
+  }
+
 }
+
 
 class Storage {
   static saveProducts(products){
@@ -135,6 +172,7 @@ class Storage {
   }
 }
 
+
 document.addEventListener("DOMContentLoaded", ()=> {
   const ui = new UI();
   const products = new Products();
@@ -144,5 +182,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
     Storage.saveProducts(products);
   }).then(()=>{
     ui.addCartButtons();
+    ui.itemAmount();
   });
 });
