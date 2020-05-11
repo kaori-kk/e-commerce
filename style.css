@@ -120,6 +120,7 @@ body {
 .img-container {
   position: relative;
   overflow: hidden;
+
 }
 .bag-btn {
   position: absolute;
@@ -148,11 +149,12 @@ body {
   display: block;
   
   height: 20rem;
-
+  margin: auto;
   transition: var(--mainTransition);
 }
 .img-container:hover .product-img {
   opacity: 0.5;
+
 }
 
 .product h3 {
@@ -230,7 +232,7 @@ body {
 }
 .cart-item img {
   width: 90px;
-  height: 80px;
+  height: 120px;
 }
 .cart-item h4 {
   font-size: 0.85rem;
