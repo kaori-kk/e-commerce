@@ -84,6 +84,7 @@ class UI {
           let savedItem = {...Storage.getProduct(id)};
           favorites = [...favorites, savedItem]
           Storage.saveItems(favorites)
+          this.displaySavedItems(savedItem)
           if(favorites.length === 1){
             this.showCart();
           }
@@ -94,9 +95,7 @@ class UI {
     })
   }
 
-  displaySavedItems(favorites){
-    let savedItem = [...Storage.getSavedItems()]
-    savedItem.forEach(item => {
+  displaySavedItems(item){
       const div = document.createElement("div");
       div.classList.add("saved-item")
       div.innerHTML = `
@@ -109,7 +108,6 @@ class UI {
         <span class="add-to-cart"><i class="fas fa-cart-plus"></i> Add to cart</span>
       `;
       savedItemContainer.appendChild(div);
-    })
 }
 
   addCartButtons(){
@@ -171,9 +169,12 @@ class UI {
 
   setup(){
     cart = Storage.getCart();
-    favorites = Storage.getSavedItems()
+    favorites = Storage.getSavedItems();
     this.setCartValues(cart);
     this.generateCartItems(cart)
+    console.log("hello")
+    this.generateSavedItems(favorites)
+    // this.displaySavedItems(favorites);
     cartBtn.addEventListener("click", this.showCart);
     closeCartBtn.addEventListener("click", this.hideCart);
   }
@@ -181,6 +182,11 @@ class UI {
   generateCartItems(cart){
     cart.forEach(item => this.addCartItems(item));
   }
+
+  generateSavedItems(favorites){
+    favorites.forEach(item => this.displaySavedItems(item));
+  }
+
 
   hideCart(){
     cartOverlay.classList.remove("overlay");
@@ -248,7 +254,6 @@ class UI {
     favorites = favorites.filter(item => item.id !== id);
     Storage.saveItems(favorites);
   }
-
 }
 
 
@@ -270,15 +275,16 @@ class Storage {
   }
 
   static saveItems(favorites){
-    localStorage.setItem("favorites", JSON.stringify(favorites))
+    if(favorites){
+      localStorage.setItem("favorites", JSON.stringify(favorites))
+    }
   }
 
   static getSavedItems(){
+    // console.log(localStorage.getItem('favorites'))
     return localStorage.getItem("favorites")?JSON.parse(localStorage.getItem("favorites")):[];
   }
-
 }
-
 
 document.addEventListener("DOMContentLoaded", ()=> {
   const ui = new UI();
@@ -291,6 +297,5 @@ document.addEventListener("DOMContentLoaded", ()=> {
     ui.addCartButtons();
     ui.itemAmount();
     ui.saveItem();
-    ui.displaySavedItems();
   });
 });
