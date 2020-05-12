@@ -17,8 +17,10 @@ const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
 
+
 let cart = [];
 let buttonsDOM = [];
+let favorites = [];
 
 class Products {
   async getProducts(){
@@ -54,12 +56,38 @@ class UI {
             <img src=${product.image} alt="product" class="product-img">
             <button class="bag-btn" data-id=${product.id}><i class="fas fa-shopping-cart"></i>Add to cart</button>
           </div>
-        <h3>${product.title}</h3>
+          <div class="product-info">
+          <i class="far fa-heart save-item" style="color: red;" data-id=${product.id}></i>
+          <h3>${product.title}</h3>
+          </div>
         <h4>$${product.price}</h4>
         </article>
       `
     });
     productsDOM.innerHTML = result;
+  }
+
+  saveItem(){
+    const saveItemButtons = [...document.querySelectorAll(".save-item")];
+    saveItemButtons.forEach(button => {
+      let id = button.dataset.id;
+      let saved = favorites.find(item => item.id === id);
+      if (saved){
+        button.classList.remove("far");
+        button.classList.add("fas")
+      }
+      button.addEventListener("click", (e) => {
+        e.target.classList.toggle("far")
+        e.target.classList.toggle("fas");
+        if(button.classList.contains("fas")){
+          let savedItem = {...Storage.getProduct(id)};
+          favorites = [...favorites, savedItem]
+          Storage.saveItems(favorites)
+        }else{
+          this.removeSavedItem(id)
+        }
+      })
+    })
   }
 
   addCartButtons(){
@@ -100,7 +128,7 @@ class UI {
     const div = document.createElement("div");
     div.classList.add("cart-item")
     div.innerHTML = `
-      <img src=${item.image} alt="product" />
+    <img src=${item.image} alt="product" />
       <div>
         <h4>${item.title}</h4>
         <h5>$${item.price}</h5>
@@ -121,6 +149,7 @@ class UI {
 
   setup(){
     cart = Storage.getCart();
+    favorites = Storage.getSavedItems()
     this.setCartValues(cart);
     this.generateCartItems(cart)
     cartBtn.addEventListener("click", this.showCart);
@@ -193,6 +222,11 @@ class UI {
     return buttonsDOM.find(button => button.dataset.id === id)
   }
 
+  removeSavedItem(id){
+    favorites = favorites.filter(item => item.id !== id);
+    Storage.saveItems(favorites);
+  }
+
 }
 
 
@@ -212,6 +246,15 @@ class Storage {
   static getCart(){
     return localStorage.getItem("cart")?JSON.parse(localStorage.getItem("cart")):[];
   }
+
+  static saveItems(favorites){
+    localStorage.setItem("favorites", JSON.stringify(favorites))
+  }
+
+  static getSavedItems(){
+    return localStorage.getItem("favorites")?JSON.parse(localStorage.getItem("favorites")):[];
+  }
+
 }
 
 
@@ -225,5 +268,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
   }).then(()=>{
     ui.addCartButtons();
     ui.itemAmount();
+    ui.saveItem();
   });
 });

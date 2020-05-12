@@ -176,7 +176,16 @@ body {
   text-align: center;
 }
 
+.product-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.fa-heart {
+  margin-top: 15px;
+  margin-right: 3px;
+}
 /* --------------- Cart ---------------- */
 .cart-overlay {
   position: fixed;
