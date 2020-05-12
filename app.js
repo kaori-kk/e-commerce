@@ -16,6 +16,7 @@ const cartItems = document.querySelector(".cart-items");
 const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
+const savedItemContainer = document.querySelector(".saved-item-container")
 
 
 let cart = [];
@@ -83,12 +84,33 @@ class UI {
           let savedItem = {...Storage.getProduct(id)};
           favorites = [...favorites, savedItem]
           Storage.saveItems(favorites)
+          if(favorites.length === 1){
+            this.showCart();
+          }
         }else{
           this.removeSavedItem(id)
         }
       })
     })
   }
+
+  displaySavedItems(favorites){
+    let savedItem = [...Storage.getSavedItems()]
+    savedItem.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("saved-item")
+      div.innerHTML = `
+        <img src="${item.image}" alt="" style="width: 90px; height: 120px;">
+        <div>
+          <h4>${item.title}</h4>
+          <h5>$${item.price}</h5>
+          <span class="remove-item">remove</span>
+        </div>
+        <span class="add-to-cart"><i class="fas fa-cart-plus"></i> Add to cart</span>
+      `;
+      savedItemContainer.appendChild(div);
+    })
+}
 
   addCartButtons(){
     const buttons = [...document.querySelectorAll(".bag-btn")]
@@ -269,5 +291,6 @@ document.addEventListener("DOMContentLoaded", ()=> {
     ui.addCartButtons();
     ui.itemAmount();
     ui.saveItem();
+    ui.displaySavedItems();
   });
 });
