@@ -106,7 +106,7 @@ class UI {
           <h5>$${item.price}</h5>
           <span class="remove-saved-item" data-id="${item.id}">remove</span>
         </div>
-        <span class="add-to-cart"><i class="fas fa-cart-plus"></i> Add to cart</span>
+        <span class="add-to-cart" data-id=${item.id}><i class="fas fa-cart-plus"></i> Add to cart</span>
       `;
       eachSavedItem.appendChild(div);
 }
@@ -174,7 +174,7 @@ class UI {
     this.setCartValues(cart);
     this.generateCartItems(cart)
     this.generateSavedItems(favorites)
-    // this.displaySavedItems(favorites);
+    this.addSavedItemtoCart();
     cartBtn.addEventListener("click", this.showCart);
     closeCartBtn.addEventListener("click", this.hideCart);
   }
@@ -262,6 +262,26 @@ class UI {
         item.parentElement.parentElement.parentElement.removeChild(item.parentElement.parentElement)
       };
     });
+  }
+
+  addSavedItemtoCart(){
+    const addToCartBtn = document.querySelectorAll(".add-to-cart")
+    const remove = document.querySelectorAll(".remove-saved-item")
+    addToCartBtn.forEach(item => {
+      item.addEventListener("click", (e) => {
+      remove.forEach(removeItem => {
+        if (item.dataset.id === removeItem.dataset.id){
+          removeItem.parentElement.parentElement.parentElement.removeChild(removeItem.parentElement.parentElement)
+        let toCartItem = {...Storage.getProduct(removeItem.dataset.id),amount: 1};
+        cart = [...cart, toCartItem]
+        Storage.saveCart(cart)
+        this.setCartValues(cart);
+        this.addCartItems(toCartItem);
+        this.removeSavedItem(removeItem.dataset.id)
+        }
+      })
+    })
+    })  
   }
 }
 
