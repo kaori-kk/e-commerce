@@ -89,23 +89,7 @@ class UI {
             this.showCart();
           }
         }else{
-          const remove = document.querySelectorAll(".remove-saved-item")
-          remove.forEach(item => {
-            if(item.dataset.id === id){
-              item.parentElement.parentElement.parentElement.removeChild(item.parentElement.parentElement)
-            }
-          })
-          
-          // savedItemContainer.children
-          // if (e.target.dataset.id === id ){
-
-          // }
-          // let removeSavedItem = savedItemContainer;
-          // console.log(removeSavedItem)
-          // // let savedId = removeSavedItem.dataset.id;
-          // // console.log(savedItemContainer.removi)
-          // savedItemContainer.removeChild(removeSavedItem.parentElement.parentElement)
-          // console.log(savedId)
+          this.deleteSavedItemFromCart(id)
           this.removeSavedItem(id)
         }
       })
@@ -269,6 +253,15 @@ class UI {
   removeSavedItem(id){
     favorites = favorites.filter(item => item.id !== id);
     Storage.saveItems(favorites);
+  }
+
+  deleteSavedItemFromCart(id){
+    const remove = document.querySelectorAll(".remove-saved-item")
+    remove.forEach(item => {
+      if(item.dataset.id === id){
+        item.parentElement.parentElement.parentElement.removeChild(item.parentElement.parentElement)
+      };
+    });
   }
 }
 
