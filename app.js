@@ -104,7 +104,7 @@ class UI {
         <div>
           <h4>${item.title}</h4>
           <h5>$${item.price}</h5>
-          <span class="remove-saved-item" data-id="${item.id}">remove</span>
+          <span class="remove-saved-item" data-id=${item.id}>remove</span>
         </div>
         <span class="add-to-cart" data-id=${item.id}><i class="fas fa-cart-plus"></i> Add to cart</span>
       `;
@@ -174,7 +174,7 @@ class UI {
     this.setCartValues(cart);
     this.generateCartItems(cart)
     this.generateSavedItems(favorites)
-    this.addSavedItemtoCart();
+    this.addSavedItemToCart();
     cartBtn.addEventListener("click", this.showCart);
     closeCartBtn.addEventListener("click", this.hideCart);
   }
@@ -244,6 +244,7 @@ class UI {
     let button = this.getSelectedButton(id);
     button.disabled = false;
     button.innerHTML = `<i class="fas fa-shopping-cart"></i>Add to Cart`;
+    
   }
 
   getSelectedButton(id){
@@ -264,25 +265,35 @@ class UI {
     });
   }
 
-  addSavedItemtoCart(){
+  addSavedItemToCart(){
     const addToCartBtn = document.querySelectorAll(".add-to-cart")
-    const remove = document.querySelectorAll(".remove-saved-item")
-    addToCartBtn.forEach(item => {
-      item.addEventListener("click", (e) => {
-      remove.forEach(removeItem => {
-        if (item.dataset.id === removeItem.dataset.id){
-          removeItem.parentElement.parentElement.parentElement.removeChild(removeItem.parentElement.parentElement)
-        let toCartItem = {...Storage.getProduct(removeItem.dataset.id),amount: 1};
-        cart = [...cart, toCartItem]
-        Storage.saveCart(cart)
-        this.setCartValues(cart);
-        this.addCartItems(toCartItem);
-        this.removeSavedItem(removeItem.dataset.id)
-        }
-      })
+    eachSavedItem.addEventListener("click",(e) => {
+      this.removeSavedItem(e.target.dataset.id)
+      this.deleteSavedItemFromCart(e.target.dataset.id)
+      let toCartItem = {...Storage.getProduct(e.target.dataset.id), amount: 1};
+      cart = [...cart, toCartItem];
+      this.addCartItems(toCartItem);
+      Storage.saveCart(cart);
+      this.setCartValues(cart);
     })
-    })  
   }
+
+  // removeFromSaved(){
+  //   eachSavedItem.addEventListener("click",(e)=> {
+  //     let element = e.target
+  //     if(element.classList.contains("remove-saved-item")){
+  //       element.parentElement.parentElement.parentElement.removeChild(element.parentElement.parentElement)
+  //       this.removeSavedItem(element.dataset.id)
+  //     }
+  //     const heart = document.querySelectorAll(".fa-heart")
+  //     heart.forEach(heart => {
+  //       if(heart.dataset.id === element.dataset.id){
+  //         heart.classList.remove("fas");
+  //         heart.classList.add("far");
+  //       }
+  //     })
+  //   })
+  // }
 }
 
 
