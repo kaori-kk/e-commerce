@@ -17,7 +17,7 @@ const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
 const savedItemContainer = document.querySelector(".saved-item-container")
-
+const eachSavedItem = document.querySelector(".saved-items")
 
 let cart = [];
 let buttonsDOM = [];
@@ -89,6 +89,23 @@ class UI {
             this.showCart();
           }
         }else{
+          const remove = document.querySelectorAll(".remove-saved-item")
+          remove.forEach(item => {
+            if(item.dataset.id === id){
+              item.parentElement.parentElement.parentElement.removeChild(item.parentElement.parentElement)
+            }
+          })
+          
+          // savedItemContainer.children
+          // if (e.target.dataset.id === id ){
+
+          // }
+          // let removeSavedItem = savedItemContainer;
+          // console.log(removeSavedItem)
+          // // let savedId = removeSavedItem.dataset.id;
+          // // console.log(savedItemContainer.removi)
+          // savedItemContainer.removeChild(removeSavedItem.parentElement.parentElement)
+          // console.log(savedId)
           this.removeSavedItem(id)
         }
       })
@@ -103,11 +120,11 @@ class UI {
         <div>
           <h4>${item.title}</h4>
           <h5>$${item.price}</h5>
-          <span class="remove-item">remove</span>
+          <span class="remove-saved-item" data-id="${item.id}">remove</span>
         </div>
         <span class="add-to-cart"><i class="fas fa-cart-plus"></i> Add to cart</span>
       `;
-      savedItemContainer.appendChild(div);
+      eachSavedItem.appendChild(div);
 }
 
   addCartButtons(){
@@ -172,7 +189,6 @@ class UI {
     favorites = Storage.getSavedItems();
     this.setCartValues(cart);
     this.generateCartItems(cart)
-    console.log("hello")
     this.generateSavedItems(favorites)
     // this.displaySavedItems(favorites);
     cartBtn.addEventListener("click", this.showCart);
@@ -281,7 +297,6 @@ class Storage {
   }
 
   static getSavedItems(){
-    // console.log(localStorage.getItem('favorites'))
     return localStorage.getItem("favorites")?JSON.parse(localStorage.getItem("favorites")):[];
   }
 }
