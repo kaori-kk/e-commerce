@@ -288,6 +288,7 @@ body {
 
 .remove-saved-item {
   cursor: pointer;
+  color: rgb(224, 224, 223);
 }
 
 

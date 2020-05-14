@@ -266,8 +266,8 @@ class UI {
   }
 
   addSavedItemToCart(){
-    const addToCartBtn = document.querySelectorAll(".add-to-cart")
     eachSavedItem.addEventListener("click",(e) => {
+      if (e.target.classList.contains("add-to-cart")){
       this.removeSavedItem(e.target.dataset.id)
       this.deleteSavedItemFromCart(e.target.dataset.id)
       let toCartItem = {...Storage.getProduct(e.target.dataset.id), amount: 1};
@@ -275,6 +275,15 @@ class UI {
       this.addCartItems(toCartItem);
       Storage.saveCart(cart);
       this.setCartValues(cart);
+      const heart = document.querySelectorAll(".fa-heart")
+      
+      heart.forEach(heart => {
+        if(heart.dataset.id === e.target.dataset.id){
+          heart.classList.remove("fas");
+          heart.classList.add("far");
+        }  
+      }) 
+      }
     })
   }
 
