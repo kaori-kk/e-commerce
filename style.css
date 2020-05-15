@@ -59,7 +59,7 @@ body {
 }
 
 .fa-bars {
-  color: black;
+  color: #222222;
 }
 /* --------------- End of Navbar ---------------- */
 
@@ -267,6 +267,7 @@ body {
 .fa-chevron-down {
   color: var(--primaryColor);
   cursor: pointer;
+  font-size: 30px;
 }
 /*---------- End of Cart Item -------------------- */
 
